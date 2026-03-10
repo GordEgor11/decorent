@@ -1,8 +1,7 @@
 import { ButtonLink } from "@/components/ButtonLink";
 import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
-
-const CITY = "Ваш город";
+import { site } from "@/config/site";
 
 const advantages = [
   {
@@ -57,7 +56,7 @@ export default function HomePage() {
               </div>
               <div className="leading-tight">
                 <div className="text-sm font-semibold">DecoRent</div>
-                <div className="text-xs text-muted">{CITY}</div>
+                <div className="text-xs text-muted">{site.city}</div>
               </div>
             </div>
             <nav className="hidden items-center gap-2 sm:flex">
@@ -85,7 +84,7 @@ export default function HomePage() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted shadow-soft">
                   <span className="size-1.5 rounded-full bg-brand" />
-                  Аренда декора для мероприятий • {CITY}
+                  Аренда декора для мероприятий • {site.city}
                 </div>
                 <h1 className="mt-5 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
                   Красивое оформление — без покупок и суеты
@@ -264,8 +263,8 @@ export default function HomePage() {
         <Container>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <div className="text-sm font-semibold">DecoRent</div>
-              <div className="mt-2 text-sm text-muted">{CITY}</div>
+              <div className="text-sm font-semibold">{site.name}</div>
+              <div className="mt-2 text-sm text-muted">{site.city}</div>
               <div className="mt-4 text-xs text-muted">
                 © {new Date().getFullYear()} • Аренда декора для мероприятий
               </div>
@@ -284,8 +283,8 @@ export default function HomePage() {
             <div>
               <div className="text-sm font-semibold">Контакты</div>
               <div className="mt-3 grid gap-2 text-sm text-muted">
-                <div>Телефон: +7 (___) ___‑__‑__</div>
-                <div>Email: hello@decorent.example</div>
+                <div>Телефон: {site.contacts.phone}</div>
+                <div>Email: {site.contacts.email}</div>
               </div>
             </div>
             <div>
