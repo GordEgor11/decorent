@@ -1,8 +1,8 @@
 export const site = {
   name: "DecoRent",
-  city: "Ваш город",
+  city: "Москва и Московская область",
   contacts: {
-    phone: "+7 (___) ___‑__‑__",
+    phone: "8 909 426-87-49",
     email: "hello@decorent.example"
   }
 } as const;
