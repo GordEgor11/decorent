@@ -51,7 +51,7 @@ export default function HomePage() {
         <Container>
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="grid size-9 place-items-center rounded-xl bg-brand2 text-white shadow-soft">
+              <div className="grid size-9 place-items-center rounded-xl bg-surface text-brand ring-1 ring-border">
                 D
               </div>
               <div className="leading-tight">
@@ -75,8 +75,8 @@ export default function HomePage() {
         {/* Hero */}
         <section className="relative overflow-hidden py-16 sm:py-24">
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -top-24 left-1/2 h-72 w-[48rem] -translate-x-1/2 rounded-full bg-brand/15 blur-3xl" />
-            <div className="absolute -bottom-24 left-1/3 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-brand2/15 blur-3xl" />
+            <div className="absolute -top-24 left-1/2 h-72 w-[48rem] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
+            <div className="absolute -bottom-24 left-1/3 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-brand2/8 blur-3xl" />
           </div>
 
           <Container>
@@ -111,22 +111,22 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-xl border border-border bg-surface p-5 shadow-soft sm:p-6">
-                <div className="aspect-[4/3] w-full rounded-xl border border-border bg-[linear-gradient(135deg,rgba(183,106,87,0.18),rgba(23,72,52,0.16))]" />
+                <div className="aspect-[4/3] w-full rounded-xl border border-border bg-[linear-gradient(135deg,rgb(var(--brand)/0.14),rgb(var(--brand2)/0.10))]" />
                 <div className="mt-5 grid gap-3">
                   <div className="text-sm font-semibold">
                     Быстрый подбор под вашу дату
                   </div>
                   <ul className="grid gap-2 text-sm text-muted">
                     <li className="flex gap-2">
-                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-brand2" />
+                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-brand" />
                       Проверим наличие и предложим альтернативы
                     </li>
                     <li className="flex gap-2">
-                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-brand2" />
+                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-brand" />
                       Подскажем по количеству и сочетаниям
                     </li>
                     <li className="flex gap-2">
-                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-brand2" />
+                      <span className="mt-1 size-1.5 shrink-0 rounded-full bg-brand" />
                       Самовывоз или доставка по договоренности
                     </li>
                   </ul>
@@ -231,10 +231,10 @@ export default function HomePage() {
         {/* CTA */}
         <section className="py-16">
           <Container>
-            <div className="rounded-xl border border-border bg-[linear-gradient(135deg,rgba(183,106,87,0.16),rgba(23,72,52,0.12))] p-8 shadow-soft sm:p-10">
+            <div className="rounded-xl border border-border bg-[linear-gradient(135deg,rgb(var(--brand)/0.12),rgb(var(--brand2)/0.08))] p-8 shadow-soft sm:p-10">
               <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_0.8fr]">
                 <div>
-                  <div className="text-xs font-semibold uppercase tracking-wide text-brand2">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-muted">
                     Готовы начать?
                   </div>
                   <div className="mt-2 text-balance text-2xl font-semibold tracking-tight sm:text-3xl">

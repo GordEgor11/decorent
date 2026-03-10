@@ -10,7 +10,7 @@ export function SectionHeading({
   return (
     <div className="max-w-2xl">
       {kicker ? (
-        <div className="text-xs font-semibold uppercase tracking-wide text-brand2">
+        <div className="text-xs font-semibold uppercase tracking-wide text-muted">
           {kicker}
         </div>
       ) : null}
