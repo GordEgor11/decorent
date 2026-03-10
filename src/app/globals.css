@@ -1,5 +1,6 @@
 :root {
   /* Palette: white + very light gray, graphite text */
+  color-scheme: light;
   --bg: 255 255 255; /* #FFFFFF */
   --surface: 250 250 250; /* #FAFAFA */
   --text: 31 41 55; /* slate-800 (graphite) */
@@ -7,18 +8,6 @@
   --border: 229 231 235; /* gray-200 */
   --brand: 177 104 86; /* muted terracotta */
   --brand2: 47 107 86; /* soft green */
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: 10 10 11;
-    --surface: 24 24 27;
-    --text: 244 244 245;
-    --muted: 161 161 170;
-    --border: 63 63 70;
-    --brand: 212 127 108;
-    --brand2: 74 170 132;
-  }
 }
 
 * {
