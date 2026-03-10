@@ -1,5 +1,8 @@
+ "use client";
+
 import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
+import { useCart } from "@/components/CartProvider";
 import { site } from "@/config/site";
 
 type DecorItem = {
@@ -100,6 +103,8 @@ function formatPrice(price: number) {
 }
 
 export default function CatalogPage() {
+  const { addItem, items, totalItems } = useCart();
+
   return (
     <main className="py-14 sm:py-18">
       <Container>
@@ -109,7 +114,25 @@ export default function CatalogPage() {
           subtitle={`Здесь будут реальные позиции из ассортимента: арки, текстиль, подсвечники, вазы и другие элементы. Пока что показываем тестовые карточки, чтобы продумать структуру и вёрстку каталога для ${site.city}.`}
         />
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 flex items-center justify-between gap-4 text-xs text-muted">
+          <p>
+            На этом шаге вы можете собрать ориентировочный список аренды. Цена
+            указана за мероприятие, финальные условия обсудим после заявки.
+          </p>
+          <a
+            href="/cart"
+            className="hidden shrink-0 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text shadow-soft transition hover:bg-bg sm:inline-flex sm:items-center sm:gap-2"
+          >
+            <span>Список аренды</span>
+            {totalItems > 0 ? (
+              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-brand text-[11px] font-semibold text-white">
+                {totalItems}
+              </span>
+            ) : null}
+          </a>
+        </div>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {demoDecorItems.map((item) => (
             <article
               key={item.id}
@@ -188,10 +211,16 @@ export default function CatalogPage() {
 
                 <button
                   type="button"
-                  disabled
+                  onClick={() =>
+                    addItem({
+                      id: item.id,
+                      name: item.name,
+                      pricePerEvent: item.pricePerEvent
+                    })
+                  }
                   className="mt-4 inline-flex h-11 items-center justify-center rounded-xl border border-dashed border-border bg-bg/60 px-4 text-sm font-medium text-muted transition group-hover:border-brand/40 group-hover:text-text"
                 >
-                  Добавить в список аренды (скоро)
+                  Добавить в список аренды
                 </button>
               </div>
             </article>
