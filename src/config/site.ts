@@ -3,7 +3,6 @@ export const site = {
   city: "Москва и Московская область",
   contacts: {
     phone: "8 909 426-87-49",
-    email: "hello@decorent.example"
+    email: "kegorkod@gmail.com"
   }
 } as const;
-

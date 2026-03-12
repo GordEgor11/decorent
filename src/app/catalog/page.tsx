@@ -1,9 +1,10 @@
- "use client";
+"use client";
 
 import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useCart } from "@/components/CartProvider";
 import { site } from "@/config/site";
+import { useMemo, useState } from "react";
 
 type DecorItem = {
   id: string;
@@ -16,87 +17,55 @@ type DecorItem = {
   description: string;
   tags: string[];
   note?: string;
+  inStock: number;
 };
 
 const demoDecorItems: DecorItem[] = [
   {
-    id: "arch-minimal",
-    name: "Минималистичная напольная арка",
-    category: "Арки и фон",
-    pricePerEvent: 8500,
-    depositFrom: 15000,
-    color: "матовое белое покрытие",
-    size: "около 2,3 м по высоте",
+    id: "white-feathers-30",
+    name: "Перья белые, 30 см",
+    category: "Флористика и аксессуары",
+    pricePerEvent: 35,
+    color: "белые",
+    size: "длина 30 см",
     description:
-      "Лаконичная металлическая арка для выездной регистрации и фотозоны. Подходит под минимализм, классику и modern.",
-    tags: ["выездная регистрация", "фон для церемонии", "минимализм"],
-    note: "Идеальна в паре с текстилем и напольными вазами."
+      "Белые декоративные перья для букетов, фотозон и акцентных композиций.",
+    tags: ["флористика", "детали", "декор"],
+    inStock: 100
   },
   {
-    id: "glass-vases-set",
-    name: "Набор стеклянных ваз разной высоты",
-    category: "Посуда и вазы",
-    pricePerEvent: 3200,
-    depositFrom: 6000,
-    color: "прозрачное стекло",
-    size: "6 ваз от 12 до 35 см",
-    description:
-      "Набор цилиндрических ваз для композиций и свечей. Выглядит аккуратно и не спорит с цветами.",
-    tags: ["столы гостей", "sweet table", "універсальный"],
-    note: "Можно использовать как под цветы, так и под плавающие свечи."
-  },
-  {
-    id: "candlesticks-gold",
-    name: "Тонкие подсвечники под свечи-таперы",
+    id: "candles-set-3",
+    name: "Набор свечей (3 шт.)",
     category: "Подсвечники и свечи",
-    pricePerEvent: 2700,
-    depositFrom: 5000,
-    color: "золотистый металл",
-    size: "на свечи диаметром 2–2,2 см",
+    pricePerEvent: 350,
+    color: "айвори",
+    size: "3 свечи в наборе",
     description:
-      "Легкие металлические подсвечники разной высоты для уютного теплого света на столах.",
-    tags: ["атмосфера", "вечер", "классика"],
-    note: "Лучше всего смотрятся группами по 3–5 штук."
+      "Аккуратный набор из трёх декоративных свечей для сервировки и уютной подсветки.",
+    tags: ["атмосфера", "сервировка", "детали"],
+    inStock: 50
   },
   {
-    id: "textile-table-runner",
-    name: "Текстильный раннер на стол",
-    category: "Текстиль",
-    pricePerEvent: 1800,
-    color: "теплый айвори",
-    size: "длина ~3 м, мягкие спуски",
+    id: "feather-stand-composition",
+    name: "Композиция на стойке с перьями",
+    category: "Композиции и стойки",
+    pricePerEvent: 3500,
+    color: "белые перья + нейтральные оттенки",
+    size: "стойка с композицией",
     description:
-      "Полупрозрачный текстильный раннер с мягкой драпировкой. Добавляет объём и фактуру сервировке.",
-    tags: ["столы гостей", "главный стол", "rustic"],
-    note: "Сочетается с натуральным деревом и прозрачным стеклом."
-  },
-  {
-    id: "numbers-acrylic",
-    name: "Номера столов из прозрачного акрила",
-    category: "Номера и таблички",
-    pricePerEvent: 1500,
-    depositFrom: 3000,
-    color: "прозрачный акрил + белый шрифт",
-    size: "формат примерно 10×15 см",
-    description:
-      "Номера столов в минималистичном стиле. Помогают гостям быстро найти свой стол и не перегружают сервировку.",
-    tags: ["организация", "минимализм"],
-    note: "Подходят к современным и классическим сервировкам."
-  },
-  {
-    id: "lanterns-floor",
-    name: "Напольные фонари со стеклом",
-    category: "Декор пространства",
-    pricePerEvent: 3900,
-    depositFrom: 7000,
-    color: "натуральное дерево + прозрачное стекло",
-    size: "набор из 3 фонарей разной высоты",
-    description:
-      "Объёмные фонари для оформления входа, дорожек и зон отдыха. Можно использовать со свечами или гирляндами.",
-    tags: ["вечерняя подсветка", "уличная церемония"],
-    note: "Хорошо работают в связке с текстилем и зеленью."
+      "Акцентная композиция на стойке с перьями для оформления зоны церемонии или фотозоны.",
+    tags: ["акцент", "фотозона", "церемония"],
+    inStock: 10
   }
 ];
+
+const priceRanges = [
+  { id: "all", label: "Любая стоимость", min: null, max: null },
+  { id: "0-3000", label: "до 3 000 ₽", min: 0, max: 3000 },
+  { id: "3000-6000", label: "3 000–6 000 ₽", min: 3000, max: 6000 },
+  { id: "6000-10000", label: "6 000–10 000 ₽", min: 6000, max: 10000 },
+  { id: "10000+", label: "от 10 000 ₽", min: 10000, max: null }
+] as const;
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("ru-RU").format(price);
@@ -104,6 +73,34 @@ function formatPrice(price: number) {
 
 export default function CatalogPage() {
   const { addItem, items, totalItems } = useCart();
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedPrice, setSelectedPrice] = useState(priceRanges[0].id);
+
+  const quantityById = useMemo(
+    () => new Map(items.map((item) => [item.id, item.quantity])),
+    [items]
+  );
+
+  const categories = useMemo(() => {
+    const unique = new Set(demoDecorItems.map((item) => item.category));
+    return ["all", ...Array.from(unique).sort()];
+  }, []);
+
+  const filteredItems = useMemo(() => {
+    const range = priceRanges.find((r) => r.id === selectedPrice) ?? priceRanges[0];
+    return demoDecorItems.filter((item) => {
+      if (selectedCategory !== "all" && item.category !== selectedCategory) {
+        return false;
+      }
+      if (range.min !== null && item.pricePerEvent < range.min) {
+        return false;
+      }
+      if (range.max !== null && item.pricePerEvent > range.max) {
+        return false;
+      }
+      return true;
+    });
+  }, [selectedCategory, selectedPrice]);
 
   return (
     <main className="py-14 sm:py-18">
@@ -111,13 +108,13 @@ export default function CatalogPage() {
         <SectionHeading
           kicker="Каталог"
           title="Подберите декор под ваше мероприятие"
-          subtitle={`Здесь будут реальные позиции из ассортимента: арки, текстиль, подсвечники, вазы и другие элементы. Пока что показываем тестовые карточки, чтобы продумать структуру и вёрстку каталога для ${site.city}.`}
+          subtitle={`В каталоге собраны позиции, которые доступны для заказа в ${site.city}. Выберите нужные детали и добавьте их в список.`}
         />
 
         <div className="mt-6 flex items-center justify-between gap-4 text-xs text-muted">
           <p>
             На этом шаге вы можете собрать ориентировочный список аренды. Цена
-            указана за мероприятие, финальные условия обсудим после заявки.
+            указана за единицу, финальные условия обсудим после заявки.
           </p>
           <a
             href="/cart"
@@ -132,8 +129,59 @@ export default function CatalogPage() {
           </a>
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {demoDecorItems.map((item) => (
+        <div className="mt-8 grid gap-4 rounded-xl border border-border bg-surface p-4 text-xs text-muted shadow-soft sm:grid-cols-[1.1fr_1.1fr_auto] sm:items-end sm:gap-6 sm:p-5">
+          <label className="grid gap-2">
+            <span className="text-[11px] uppercase tracking-wide">Категория</span>
+            <select
+              value={selectedCategory}
+              onChange={(event) => setSelectedCategory(event.target.value)}
+              className="h-11 rounded-xl border border-border bg-bg px-3 text-sm text-text outline-none ring-brand/40 focus:ring-2"
+            >
+              <option value="all">Все категории</option>
+              {categories
+                .filter((category) => category !== "all")
+                .map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label className="grid gap-2">
+            <span className="text-[11px] uppercase tracking-wide">
+              Стоимость аренды
+            </span>
+            <select
+              value={selectedPrice}
+              onChange={(event) => setSelectedPrice(event.target.value)}
+              className="h-11 rounded-xl border border-border bg-bg px-3 text-sm text-text outline-none ring-brand/40 focus:ring-2"
+            >
+              {priceRanges.map((range) => (
+                <option key={range.id} value={range.id}>
+                  {range.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+            <div className="text-[11px] uppercase tracking-wide text-muted">
+              Найдено: {filteredItems.length}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCategory("all");
+                setSelectedPrice(priceRanges[0].id);
+              }}
+              className="inline-flex h-11 items-center justify-center rounded-xl border border-border bg-bg px-4 text-xs font-medium text-muted transition hover:bg-surface/70"
+            >
+              Сбросить фильтры
+            </button>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filteredItems.map((item) => (
             <article
               key={item.id}
               className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-soft transition hover:-translate-y-0.5 hover:shadow-[0_16px_42px_rgba(0,0,0,0.10)]"
@@ -182,10 +230,10 @@ export default function CatalogPage() {
                 <div className="mt-1 flex items-baseline justify-between gap-3">
                   <div>
                     <div className="text-xs uppercase tracking-wide text-muted">
-                      Ориентировочная аренда
+                      Стоимость
                     </div>
                     <div className="mt-0.5 text-sm font-semibold">
-                      от {formatPrice(item.pricePerEvent)} ₽ за мероприятие
+                      {formatPrice(item.pricePerEvent)} ₽ за штуку
                     </div>
                     {item.depositFrom ? (
                       <div className="mt-0.5 text-[11px] text-muted">
@@ -204,10 +252,14 @@ export default function CatalogPage() {
 
                 <div className="mt-3 flex justify-between gap-3 text-xs text-muted">
                   <span>Дата и количество будут выбраны позже.</span>
-                  <span className="hidden text-[11px] sm:inline">
-                    В MVP список аренды и фильтры добавим отдельным шагом.
-                  </span>
+                  <span className="text-[11px]">В наличии: {item.inStock} шт.</span>
                 </div>
+
+                {quantityById.get(item.id) ? (
+                  <div className="text-xs font-medium text-text">
+                    В корзине: {quantityById.get(item.id)} шт.
+                  </div>
+                ) : null}
 
                 <button
                   type="button"
@@ -227,13 +279,13 @@ export default function CatalogPage() {
           ))}
         </div>
 
-        <p className="mt-6 max-w-2xl text-xs leading-6 text-muted">
-          Сейчас вы видите демонстрационные карточки. На следующих шагах мы
-          подключим реальные данные из базы, фильтры по категориям и полноценный
-          &quot;список аренды&quot; с выбором даты мероприятия.
-        </p>
+        {filteredItems.length === 0 ? (
+          <div className="mt-6 rounded-xl border border-border bg-surface p-5 text-sm text-muted shadow-soft">
+            По выбранным фильтрам нет позиций. Попробуйте изменить категорию
+            или диапазон стоимости.
+          </div>
+        ) : null}
       </Container>
     </main>
   );
 }
-
