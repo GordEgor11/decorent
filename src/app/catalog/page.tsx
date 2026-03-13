@@ -1,10 +1,12 @@
 "use client";
 
+import { ButtonLink } from "@/components/ButtonLink";
 import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useCart } from "@/components/CartProvider";
 import { site } from "@/config/site";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type DecorItem = {
   id: string;
@@ -56,6 +58,42 @@ const demoDecorItems: DecorItem[] = [
       "Акцентная композиция на стойке с перьями для оформления зоны церемонии или фотозоны.",
     tags: ["акцент", "фотозона", "церемония"],
     inStock: 10
+  },
+  {
+    id: "green-napkins",
+    name: "Салфетки зелёные",
+    category: "Сервировка",
+    pricePerEvent: 120,
+    color: "зелёные",
+    size: "стандартный размер",
+    description:
+      "Зелёные салфетки для сервировки столов и оформления композиций.",
+    tags: ["сервировка", "текстиль", "детали"],
+    inStock: 100
+  },
+  {
+    id: "napkin-rings",
+    name: "Кольца для салфеток",
+    category: "Сервировка",
+    pricePerEvent: 100,
+    color: "нейтральный металл",
+    size: "стандартный размер",
+    description:
+      "Кольца для салфеток, чтобы аккуратно собрать сервировку и добавить акцент.",
+    tags: ["сервировка", "детали"],
+    inStock: 100
+  },
+  {
+    id: "disco-ball-40",
+    name: "Диско-шар 40 см",
+    category: "Декор пространства",
+    pricePerEvent: 1700,
+    color: "зеркальная мозаика",
+    size: "диаметр 40 см",
+    description:
+      "Большой диско-шар для эффектного света и акцента в зале или на фотозоне.",
+    tags: ["свет", "вечеринка", "фотозона"],
+    inStock: 5
   }
 ];
 
@@ -72,6 +110,7 @@ function formatPrice(price: number) {
 }
 
 export default function CatalogPage() {
+  const searchParams = useSearchParams();
   const { addItem, items, totalItems } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedPrice, setSelectedPrice] = useState(priceRanges[0].id);
@@ -85,6 +124,17 @@ export default function CatalogPage() {
     const unique = new Set(demoDecorItems.map((item) => item.category));
     return ["all", ...Array.from(unique).sort()];
   }, []);
+
+  useEffect(() => {
+    const requested = searchParams.get("category");
+    if (!requested) {
+      setSelectedCategory("all");
+      return;
+    }
+    if (categories.includes(requested)) {
+      setSelectedCategory(requested);
+    }
+  }, [searchParams, categories]);
 
   const filteredItems = useMemo(() => {
     const range = priceRanges.find((r) => r.id === selectedPrice) ?? priceRanges[0];
@@ -111,7 +161,17 @@ export default function CatalogPage() {
           subtitle={`В каталоге собраны позиции, которые доступны для заказа в ${site.city}. Выберите нужные детали и добавьте их в список.`}
         />
 
-        <div className="mt-6 flex items-center justify-between gap-4 text-xs text-muted">
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted">
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-xs font-medium text-text shadow-soft transition hover:bg-bg"
+          >
+            <span aria-hidden="true">←</span>
+            <span>На главную</span>
+          </a>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between gap-4 text-xs text-muted">
           <p>
             На этом шаге вы можете собрать ориентировочный список аренды. Цена
             указана за единицу, финальные условия обсудим после заявки.
@@ -283,6 +343,20 @@ export default function CatalogPage() {
           <div className="mt-6 rounded-xl border border-border bg-surface p-5 text-sm text-muted shadow-soft">
             По выбранным фильтрам нет позиций. Попробуйте изменить категорию
             или диапазон стоимости.
+          </div>
+        ) : null}
+
+        {totalItems > 0 ? (
+          <div className="pointer-events-none fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-6">
+            <div className="pointer-events-auto ml-auto w-fit">
+              <ButtonLink
+                href="/request"
+                variant="secondary"
+                className="h-10 rounded-full px-4 py-0 text-xs font-medium shadow-soft"
+              >
+                Перейти к оформлению
+              </ButtonLink>
+            </div>
           </div>
         ) : null}
       </Container>
