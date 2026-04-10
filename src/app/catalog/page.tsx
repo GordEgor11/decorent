@@ -7,6 +7,7 @@ import { useCart } from "@/components/CartProvider";
 import { site } from "@/config/site";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type DecorItem = {
   id: string;
@@ -162,13 +163,13 @@ export default function CatalogPage() {
         />
 
         <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-xs font-medium text-text shadow-soft transition hover:bg-bg"
           >
             <span aria-hidden="true">←</span>
             <span>На главную</span>
-          </a>
+          </Link>
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-4 text-xs text-muted">
@@ -176,7 +177,7 @@ export default function CatalogPage() {
             На этом шаге вы можете собрать ориентировочный список аренды. Цена
             указана за единицу, финальные условия обсудим после заявки.
           </p>
-          <a
+          <Link
             href="/cart"
             className="hidden shrink-0 rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text shadow-soft transition hover:bg-bg sm:inline-flex sm:items-center sm:gap-2"
           >
@@ -186,7 +187,7 @@ export default function CatalogPage() {
                 {totalItems}
               </span>
             ) : null}
-          </a>
+          </Link>
         </div>
 
         <div className="mt-8 grid gap-4 rounded-xl border border-border bg-surface p-4 text-xs text-muted shadow-soft sm:grid-cols-[1.1fr_1.1fr_auto] sm:items-end sm:gap-6 sm:p-5">
