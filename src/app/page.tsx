@@ -4,6 +4,7 @@ import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
 import { site } from "@/config/site";
 
+
 const advantages = [
   {
     title: "Красиво и без лишних покупок",
@@ -270,12 +271,12 @@ export default function HomePage() {
             <div>
               <div className="text-sm font-semibold">Навигация</div>
               <div className="mt-3 grid gap-2 text-sm text-muted">
-                <a className="hover:text-text" href="/catalog">
+                <Link className="hover:text-text" href="/catalog">
                   Каталог
-                </a>
-                <a className="hover:text-text" href="/request">
+                </Link>
+                <Link className="hover:text-text" href="/request">
                   Оставить заявку
-                </a>
+                </Link>
               </div>
             </div>
             <div>
@@ -294,7 +295,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </Conчtainer>
+        </Container>
       </footer>
     </div>
   );
