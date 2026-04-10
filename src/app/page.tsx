@@ -283,6 +283,7 @@ export default function HomePage() {
               <div className="mt-3 grid gap-2 text-sm text-muted">
                 <div>Телефон: {site.contacts.phone}</div>
                 <div>Email: {site.contacts.email}</div>
+                <div>Telegram: @{site.contacts.telegram}</div>
               </div>
             </div>
             <div>
