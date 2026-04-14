@@ -8,6 +8,7 @@ import { site } from "@/config/site";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 type DecorItem = {
   id: string;
@@ -21,6 +22,7 @@ type DecorItem = {
   tags: string[];
   note?: string;
   inStock: number;
+  imageSrc?: string;
 };
 
 const demoDecorItems: DecorItem[] = [
@@ -58,7 +60,8 @@ const demoDecorItems: DecorItem[] = [
     description:
       "Акцентная композиция на стойке с перьями для оформления зоны церемонии или фотозоны.",
     tags: ["акцент", "фотозона", "церемония"],
-    inStock: 10
+    inStock: 10,
+    imageSrc: "/catalog/feather-stand-composition.jpg"
   },
   {
     id: "green-napkins",
@@ -259,8 +262,21 @@ function CatalogContent() {
               key={item.id}
               className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-soft transition hover:-translate-y-0.5 hover:shadow-[0_16px_42px_rgba(0,0,0,0.10)]"
             >
-              <div className="relative aspect-[4/3] bg-[radial-gradient(circle_at_top_left,rgb(var(--brand)/0.20),transparent_55%),radial-gradient(circle_at_bottom_right,rgb(var(--brand2)/0.18),transparent_55%)]">
-                <div className="absolute inset-3 rounded-[0.9rem] border border-white/40 bg-gradient-to-br from-white/55 via-white/20 to-white/5 backdrop-blur-sm" />
+              <div className="relative aspect-[4/3] overflow-hidden bg-[radial-gradient(circle_at_top_left,rgb(var(--brand)/0.20),transparent_55%),radial-gradient(circle_at_bottom_right,rgb(var(--brand2)/0.18),transparent_55%)]">
+                {item.imageSrc ? (
+                  <>
+                    <Image
+                      src={item.imageSrc}
+                      alt={item.name}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+                  </>
+                ) : (
+                  <div className="absolute inset-3 rounded-[0.9rem] border border-white/40 bg-gradient-to-br from-white/55 via-white/20 to-white/5 backdrop-blur-sm" />
+                )}
                 <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-bg/80 px-3 py-1 text-xs font-medium text-muted ring-1 ring-border/70">
                   <span className="size-1.5 rounded-full bg-brand" />
                   {item.category}
