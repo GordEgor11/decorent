@@ -5,7 +5,7 @@ import { Container } from "@/components/Container";
 import { SectionHeading } from "@/components/SectionHeading";
 import { useCart } from "@/components/CartProvider";
 import { site } from "@/config/site";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -106,15 +106,23 @@ const priceRanges = [
   { id: "10000+", label: "от 10 000 ₽", min: 10000, max: null }
 ] as const;
 
+type PriceRangeId = (typeof priceRanges)[number]["id"];
+
 function formatPrice(price: number) {
   return new Intl.NumberFormat("ru-RU").format(price);
 }
 
-export default function CatalogPage() {
+function isPriceRangeId(value: string): value is PriceRangeId {
+  return priceRanges.some((range) => range.id === value);
+}
+
+function CatalogContent() {
   const searchParams = useSearchParams();
   const { addItem, items, totalItems } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedPrice, setSelectedPrice] = useState(priceRanges[0].id);
+  const [selectedPrice, setSelectedPrice] = useState<PriceRangeId>(
+    priceRanges[0].id
+  );
 
   const quantityById = useMemo(
     () => new Map(items.map((item) => [item.id, item.quantity])),
@@ -214,7 +222,11 @@ export default function CatalogPage() {
             </span>
             <select
               value={selectedPrice}
-              onChange={(event) => setSelectedPrice(event.target.value)}
+              onChange={(event) => {
+                if (isPriceRangeId(event.target.value)) {
+                  setSelectedPrice(event.target.value);
+                }
+              }}
               className="h-11 rounded-xl border border-border bg-bg px-3 text-sm text-text outline-none ring-brand/40 focus:ring-2"
             >
               {priceRanges.map((range) => (
@@ -362,5 +374,13 @@ export default function CatalogPage() {
         ) : null}
       </Container>
     </main>
+  );
+}
+
+export default function CatalogPage() {
+  return (
+    <Suspense fallback={<main className="py-14 sm:py-18" />}>
+      <CatalogContent />
+    </Suspense>
   );
 }
